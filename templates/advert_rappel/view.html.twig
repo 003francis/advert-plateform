@@ -1,0 +1,236 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }}-LES REPOSITORIES{% endblock %}
+
+{% block body %}
+    {# Les lignes de code généré par make:controller
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/rappelsfcalc/src/Controller/AdvertRappelController.php'|file_link(0) }}">src/Controller/AdvertRappelController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/wamp64/www/rappelsfcalc/templates/advert_rappel/index.html.twig'|file_link(0) }}">templates/advert_rappel/index.html.twig</a></code></li>
+    </ul>
+</div>
+#}
+    <h1 style="text-align: center; text-decoration: underline; font-size: 2em"><strong> A) LES METHODES NORMALES DE
+            REPOSITORIES </strong></h1>
+    <hr>
+    <h1><strong> 1)Méthode find() de l'annonce n°{{ advert1.id }} ! </strong></h1>
+    <div class="well">
+        <h2>Annonce-n°<strong>{{ advert1.id }}</strong></h2>
+        <div class="well">
+            Titre : {{ advert1.title }} <br>
+            {# {% if {{ advert.pusblished }}==1 %} #}
+            <i>Publiée par {{ advert1.author }}, le {{ advert1.date|date('d/M/Y') }}</i>
+            {# {% endif %} #}
+            <p class="well" style="margin-left: 5%; margin-top: 1%">
+                {{ advert1.content }}
+            </p>
+        </div>
+    </div>
+    <hr>
+    <h1><strong> 2)Méthode findAll() des ANNONCES! </strong></h1>
+    {% if listAdvert2|length > 0 %}
+        {% for advert in listAdvert2 %}
+            <div class="well">
+                <h2>Annonce-n°<strong>{{ advert.id }}</strong></h2>
+                <div class="well">
+                    Titre : {{ advert.title }} <br>
+                    {# {% if {{ advert.pusblished }}==1 %} #}
+                    <i>Publiée par {{ advert.author }}, le {{ advert.date|date('d/M/Y') }}</i>
+                    {# {% endif %} #}
+                    <p class="well" style="margin-left: 5%; margin-top: 1%">
+                        {{ advert.content }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Pas (encore) d'Annonce enregistrée!!!!</p>
+    {% endif %}
+    <hr>
+    <h1><strong> 3)Méthode findBy() des ANNONCES! </strong></h1>
+    {% if listAdvert3|length > 0 %}
+        {% for advert in listAdvert3 %}
+            <div class="well">
+                <h2>Annonce-n°<strong>{{ advert.id }}</strong></h2>
+                <div class="well">
+                    Titre : {{ advert.title }} <br>
+                    {# {% if {{ advert.pusblished }}==1 %} #}
+                    <i>Publiée par {{ advert.author }}, le {{ advert.date|date('d/M/Y') }}</i>
+                    {# {% endif %} #}
+                    <p class="well" style="margin-left: 5%; margin-top: 1%">
+                        {{ advert.content }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Pas (encore) d'Annonce enregistrée!!!!</p>
+    {% endif %}
+    <hr>
+    <h1><strong> 4)Méthode findOneBy() de l'annonce n°{{ advert4.id }} ! </strong></h1>
+    <div class="well">
+        <h2>Annonce-n°<strong>{{ advert4.id }}</strong></h2>
+        <div class="well">
+            Titre : {{ advert4.title }} <br>
+            {# {% if {{ advert.pusblished }}==1 %} #}
+            <i>Publiée par {{ advert4.author }}, le {{ advert4.date|date('d/M/Y') }}</i>
+            {# {% endif %} #}
+            <p class="well" style="margin-left: 5%; margin-top: 1%">
+                {{ advert4.content }}
+            </p>
+        </div>
+    </div>
+    <hr>
+    <h1 style="text-align: center; text-decoration: underline; font-size: 2em"><strong> B) LES METHODES MAGIQUES DE
+            REPOSITORIES </strong></h1>
+    <hr>
+    <h1><strong> 1)Méthode findByX($valeur) des ANNONCES! </strong></h1>
+    {% if listAdvert5|length > 0 %}
+        {% for advert in listAdvert5 %}
+            <div class="well">
+                <h2>Annonce-n°<strong>{{ advert.id }}</strong></h2>
+                <div class="well">
+                    Titre : {{ advert.title }} <br>
+                    {# {% if {{ advert.pusblished }}==1 %} #}
+                    <i>Publiée par {{ advert.author }}, le {{ advert.date|date('d/M/Y') }}</i>
+                    {# {% endif %} #}
+                    <p class="well" style="margin-left: 5%; margin-top: 1%">
+                        {{ advert.content }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Pas (encore) d'Annonce enregistrée!!!!</p>
+    {% endif %}
+    <hr>
+    <h1><strong> 2)Méthode findOneByX($valeur) de l'annonce n°{{ advert6.id }} ! </strong></h1>
+    <div class="well">
+        <h2>Annonce-n°<strong>{{ advert6.id }}</strong></h2>
+        <div class="well">
+            Titre : {{ advert6.title }} <br>
+            {# {% if {{ advert.pusblished }}==1 %} #}
+            <i>Publiée par {{ advert6.author }}, le {{ advert6.date|date('d/M/Y') }}</i>
+            {# {% endif %} #}
+            <p class="well" style="margin-left: 5%; margin-top: 1%">
+                {{ advert6.content }}
+            </p>
+        </div>
+    </div>
+    <hr>
+    <h1 style="text-align: center; text-decoration: underline; font-size: 2em"><strong> C) LES METHODES PERSONNELLES DE
+            REPOSITORIES </strong></h1>
+    <hr>
+    <h1><strong> 1)Méthode myFindAll() des ANNONCES! </strong></h1>
+    {% if listAdvert7|length > 0 %}
+        {% for advert in listAdvert7 %}
+            <div class="well">
+                <h2>Annonce-n°<strong>{{ advert.id }}</strong></h2>
+                <div class="well">
+                    Titre : {{ advert.title }} <br>
+                    {# {% if {{ advert.pusblished }}==1 %} #}
+                    <i>Publiée par {{ advert.author }}, le {{ advert.date|date('d/M/Y') }}</i>
+                    {# {% endif %} #}
+                    <p class="well" style="margin-left: 5%; margin-top: 1%">
+                        {{ advert.content }}
+
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Pas (encore) d'Annonce enregistrée!!!!</p>
+    {% endif %}
+    <hr>
+
+    <h1 style="text-align: center; text-decoration: underline; font-size: 2em"><strong> D) LES METHODES du DQL (Doctrine
+            Query Language) </strong></h1>
+    <hr>
+    <h1><strong> 1)Méthode myFindAllDQL() des ANNONCES! </strong></h1>
+    {% if listAdvert8|length > 0 %}
+        {% for advert in listAdvert8 %}
+            <div class="well">
+                <h2>Annonce-n°<strong>{{ advert.id }}</strong></h2>
+                <div class="well">
+                    Titre : {{ advert.title }} <br>
+                    {# {% if {{ advert.pusblished }}==1 %} #}
+                    <i>Publiée par {{ advert.author }}, le {{ advert.date|date('d/M/Y') }}</i>
+                    {# {% endif %} #}
+                    <p class="well" style="margin-left: 5%; margin-top: 1%">
+                        {{ advert.content }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Pas (encore) d'Annonce enregistrée!!!!</p>
+    {% endif %}
+    <hr>
+    <h1><strong> 2)Méthode myFindDQL($id) de l'annonce n°{{ advert9.id }} ! </strong></h1>
+    <div class="well">
+        <h2>Annonce-n°<strong>{{ advert9.id }}</strong></h2>
+        <div class="well">
+            Titre : {{ advert9.title }} <br>
+            {# {% if {{ advert.pusblished }}==1 %} #}
+            <i>Publiée par {{ advert9.author }}, le {{ advert9.date|date('d/M/Y') }}</i>
+            {# {% endif %} #}
+            <p class="well" style="margin-left: 5%; margin-top: 1%">
+                {{ advert9.content }}
+            </p>
+        </div>
+    </div>
+    <hr>
+
+    <h1 style="text-align: center; text-decoration: underline; font-size: 2em"><strong> E) LES JOINTURES </strong></h1>
+    <hr>
+    <h1><strong> 1)getAdvertWithApplications() des ANNONCES! </strong></h1>
+    {% if listAdvert10|length > 0 %}
+        {% for advert in listAdvert10 %}
+            <div class="well">
+                <h2>Annonce-n°<strong>{{ advert.id }}</strong></h2>
+                <div class="well">
+                    Titre : {{ advert.title }} <br>
+                    {# {% if {{ advert.pusblished }}==1 %} #}
+                    <i>Publiée par {{ advert.author }}, le {{ advert.date|date('d/M/Y') }}</i>
+                    {# {% endif %} #}
+                    <p class="well" style="margin-left: 5%; margin-top: 1%">
+                        {{ advert.content }}
+                    </p>
+                    <strong> Applications: </strong>
+                    {% for app in advert.applications %}
+                        {{ app.author }}{% if not loop.last %}, {% else %}.{% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Pas (encore) d'Annonce enregistrée!!!!</p>
+    {% endif %}
+    <hr>
+
+
+
+
+
+
+    <div>
+        {# On affiche tous les messages flash dont le nom est "info" #}
+        {#
+         {% for message in app.flashes('info') %}
+         <p>Message Flash:{{ message }}</p>
+         {% endfor %}
+         #}
+
+    </div>
+
+
+{% endblock %}

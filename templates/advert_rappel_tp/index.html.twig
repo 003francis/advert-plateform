@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Accueil-{{ parent() }}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleIndex.css') }}">
+{% endblock %}
+
+{% block body %}
+    {#On affiche un message de Bienvenue à l'Utilisateur courant#}
+    {% if app.user is not null %}
+        <div class="alert alert-danger" style="text-align: center; font-size: 2em">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ 'welcome'|trans({'%name%': app.user.username}) }}</strong>
+        </div>
+        <h1 id="elementTitre" style="text-align: center; font-size: 3em;font-weight:bold">Voici vos Annonces</h1>
+        {% else %}
+            <h1 id="elementTitre" style="text-align: center; font-size: 4em;font-weight:bold">Annonces</h1>
+    {% endif %}
+       <hr>
+    <div class="well">
+        <h2>Liste d'Annonces</h2>
+        <ul>
+            {% for advert in listAdverts %}
+                <li>
+                    <a href="{{ path('oc_advert_viewAction', {'id': advert.id}) }}">
+                        {{ advert.title }}
+                    </a>
+                    par {{ advert.author }},
+                    le {{ advert.date|date('d/m/Y') }}
+                </li>
+            {% else %}
+                <li>Pas (encore!) d'annonces</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {#Affichage avec La pagination#}
+
+    <ul class="pager pagination-lg">
+        {#
+        <ul class="pagination pagination-lg">
+        On peut aussi utiliser la classe "pager" à la place de "pagination"#}
+        {#On utilise la fonction range(a,b) qui crée un tableau de valeurs
+        entre a et b#}
+        {% for p in  range(1, nbPages) %}
+
+            <li{% if p == page %} class="active" {% endif %}>
+                <a href="{{ path('oc_advert_index', {'page': p}) }}" id="pageActive">{{ p }}</a>
+            </li>
+
+        {% endfor %}
+    </ul>
+{% endblock %}
+

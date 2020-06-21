@@ -1,0 +1,26 @@
+.pager a:hover,
+.pager a:focus {
+    color: #761c19;
+    font-size: 2em;
+}
+/*Quand un lien de la Classe "pager" est Actif*/
+.pager > .active > a {
+    /* z-index: 3; */
+    color: #fff;
+    cursor: default;
+    font-size: 1.7em;
+    background-color: #761c19;
+    border-color: #761c19;
+}
+
+/*Quand un lien de la classe "pager" est actif et que la souris
+ou le focus survole sur lui */
+.pager > .active > a:hover,
+.pager > .active > a:focus {
+    background-color: #761c19;
+    font-size: 2em;
+}
+
+#elementTitre{
+    text-align: center;
+}

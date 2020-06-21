@@ -1,0 +1,74 @@
+#la syntaxe est "la chaîne source: la chaîne cible"
+###1) L'Usage des Mots clés
+#*****************************
+######ça devient moins beau quand il y a beaucoup de lignes
+# La Solution est alors de NICHER la traduction, i.e la FACTORISER #voir en 2
+
+#site.devise: Ce Projet est propulsé par Calculus, et construit grâce au MOOC OpenClassrooms et SensioLabs.
+#site.titre: Ma Plateforme d'annonces
+#site.bouton1: Participer au MOOC
+
+#**************************************
+#2) NICHER(ou FACTORISER) la traduction: Cette façon d'écrire n'est VALABLE qu'en FORMAT YAML
+#Il s'agit de bien Indenter le code. Et leur appel est PAREIL à la structure en 1)
+advert:
+  devise:  Ce Projet est propulsé par Calculus, et construit grâce au MOOC OpenClassrooms et SensioLabs.
+  titre:   Ma Plateforme d'annonces
+  bouton1: Participer au MOOC
+  edit:
+    title:         Édition d'une annonce
+    submit_button: Valider
+  show:
+    edit_button:   Éditer l'annonce
+    create_button: Créer une nouvelle annonce
+  ##Avec cette façon de noter les mots clés, pour récupérer par ex. la dévise, on notera dans la vue 'advert.devise'
+  #Quand Symfony va lire cette portion de YAML,
+  #il va remplacer chaque séquence « deux points − retour à la ligne − indentation »
+  #par un simple point, devenant ainsi l'équivalent de ce que vous aviez précédemment
+  #**************************************************************************************************************************
+#******************************************************
+#Permettre le retour à la ligne au milieu des chaînes cibles
+#******************************************************
+  charte:
+    titre: Mentions Légales
+    contenu:
+      # Le chevron « > » en début de chaîne indique que la chaîne cible est sur
+      # plusieurs lignes, mais les retours à la ligne ne seront pas présents
+      # dans le code HTML, car ils seront remplacés par des espaces.
+      # L'indentation doit être faite sur tout le paragraphe.
+      #premier_paragraphe:
+      #Les éléments de la liste sont précédés d'un tiret en YAML
+      - >
+          OpenClassrooms recueille des informations (login, e-mail) lors de
+          votre enregistrement en tant que membre du site. Lors de votre
+          connexion au site, un fichier "log" stocke les actions effectuées
+          par votre ordinateur (via son adresse IP) au serveur.
+
+      #La pipe « | » permet la même chose, mais les retours à la ligne seront
+      # présents dans le code HTML, et non remplacés par des espaces.
+      # Vous pouvez utiliser nl2br() sur une telle chaîne, cela permet
+      # d'avoir le code comme présenté ci-dessous (l'indendation en moins).
+      #deuxieme_paragraphe:
+      #
+      - |
+          Lorsque que vous vous connectez en tant que membre de OpenClassrooms et
+          que vous cochez la case correspondante, un cookie est envoyé à votre
+          ordinateur afin qu'il se souvienne de votre login et de votre mot de
+          passe. Ceci vous est proposé uniquement afin d'automatiser la
+          procédure de connexion, et n'est en aucun cas utilisé par Simple IT à
+          d'autres fins.
+      - Merci de votre attention
+#*************************************************************************************
+#Le Placeholder: est une sorte de paramètre dans une chaîne cible
+#*************************************************************************************
+welcome: Bienvenue %name% !  #La valeur de ce PlaceHolder sera spécifié lors du rendu d'une vue. Ceci permet de traduire la phrase complète
+#*************************************************************************************
+#LA GESTION DES PLURIELS
+#*********************
+quantite:
+  nombre: "[0,1]Il y a %count% annonce|[2,+inf]Il y a %count% annnonces"
+
+  #Et dans la vue pour récupérer le nombre, il faut utiliser la balise/fonction/service: transchoice
+  # {{'quantite.nombre'|transchoice(nombre)}} : pour le filtre
+  # {% transchoice nombre %} quantite.nombre {% endtranschoice %}
+  # $translator->transchoice('quantite.nombre', $nombre)

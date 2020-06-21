@@ -1,0 +1,20 @@
+#la syntaxe est "la chaîne source: la chaîne cible"
+#site.devise: This Project is propulsed by Calculus, and made with OpenClassrooms MOOC and SensioLabs help.
+#site.titre: My Adverts Plateform
+#site.bouton1: Take part to MOOC
+
+advert:
+  devise:  This Project is propulsed by Calculus, and made with OpenClassrooms MOOC and SensioLabs help.
+  titre:   My Adverts Plateform
+  bouton1: Take part to MOOC
+  edit:
+    title:         Edit an advert
+    submit_button: Validate
+  show:
+    edit_button:   Edit the advert
+    create_button: make an new advert
+
+welcome: Welcome %name%!
+
+quantite:
+  nombre: "[0,1]There's advert|[2,+inf]There's %count% adverts"

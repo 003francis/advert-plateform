@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="0jg4sef" resname="J'aime Symfony">
+        <source>J'aime Symfony</source>
+        <target>Symfony is great</target>
+      </trans-unit>
+      <trans-unit id="HQOyiQm" resname="Ma Plateforme d'annonces">
+        <source>Ma Plateforme d'annonces</source>
+        <target>My Adverts Plateform</target>
+      </trans-unit>
+      <trans-unit id="31V.tlW" resname="Ce Projet est propulsé par Calculus,&#10;            et construit grâce au MOOC OpenClassrooms et SensioLabs.">
+        <source>Ce Projet est propulsé par Calculus,
+            et construit grâce au MOOC OpenClassrooms et SensioLabs.</source>
+        <target>This Project is propulsed by Calculus,
+            and made with OpenClassrooms MOOC and SensioLabs help.</target>
+      </trans-unit>
+      <trans-unit id="Zlp0Ccy" resname="Participer au MOOC">
+        <source>Participer au MOOC</source>
+        <target>Take part to MOOC</target>
+      </trans-unit>
+      <trans-unit id="UrWRLes" resname="Les Annonces">
+        <source>Les Annonces</source>
+        <target>The Adverts</target>
+      </trans-unit>
+      <trans-unit id="UzFhc1Y" resname="Accueil">
+        <source>Accueil</source>
+        <target>Welcome</target>
+      </trans-unit>
+      <trans-unit id="HOL_P_h" resname="Ajouter une annonce">
+        <source>Ajouter une annonce</source>
+        <target>Add an advert</target>
+      </trans-unit>
+      <trans-unit id="8ZOfJp2" resname="Dernières Annonces">
+        <source>Dernières Annonces</source>
+        <target>Latest Adverts</target>
+      </trans-unit>
+      <trans-unit id=".cXS6UE" resname="Powered by">
+        <source>Powered by</source>
+        <target>Powered by</target>
+      </trans-unit>
+      <trans-unit id="7Mix3rl" resname="Salut ! J'aime Symfony !!">
+        <source>Salut ! J'aime Symfony !!</source>
+        <target>Hello ! Symfony is great !!</target>
+      </trans-unit>
+      <trans-unit id="GF_NsyJ" resname="Salut">
+        <source>Salut</source>
+        <target>Hello</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

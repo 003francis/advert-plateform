@@ -1,0 +1,180 @@
+
+{#Formulaire qui sera inclus par les autres vues#}
+<link rel="stylesheet" text="text/css" href="{{ asset('css/styleForm.css') }}">
+<div class="well">
+    <div class="row">
+        <div class="col-md-push-1 col-md-10 well" style="margin-top: 2%">
+            {{ form_start(formAdvert, {'attr':{'class':'form-horizontal'}}) }}
+
+            {#Les erreurs générales du formulaire...#}
+            {{ form_errors(formAdvert) }}
+
+            {# Ce Test sur la Date, c'est pour vérifier que la Date existe
+            ou pas... Ceci est important dans le sens que dans le cadre :
+            -1) De l'Ajout d'une Annonce, le Champ "date" existe
+            -2) Et dans le cadre de la Modification d'une Annonce, Le champ "date" n'existe pas
+            #}
+            {% if formAdvert.date is defined %}
+                <div class="form-group">
+                    {#Génération du Label#}
+                    <div class="col-sm-4">
+                        {{ form_label(formAdvert.date,"Date de l'annonce") }}
+                    </div>
+                    {#Affichage des erreurs pour ce champ précis#}
+                    <div class="erreurChamp">
+                        {{ form_errors(formAdvert.date) }}
+                    </div>
+                    {#Génération de l'input#}
+                    <div class="col-sm-8">
+                        {#Génération de l'input#}
+                        {{ form_widget(formAdvert.date) }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {#Génération Manuelle et Eclatée#}
+            <div style="font-size: large" class="well">
+                <div class="form-group">
+                    {#Génération du Label#}
+                    <div class="col-sm-4">
+                        {{ form_label(formAdvert.title,"Titre de l'annonce") }}
+                    </div>
+                    {#Affichage des erreurs pour ce champ précis#}
+                    <div class="erreurChamp">
+                        {{ form_errors(formAdvert.title) }}
+                    </div>
+
+
+                    {#Génération de l'input#}
+                    <div class="col-sm-8">
+                        {#Génération de l'input#}
+                        {{ form_widget(formAdvert.title, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                </div>
+
+                {#Champ "Contenude l'Annonce"#}
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        {{ form_label(formAdvert.content,"Contenu de l'annonce") }}
+                    </div>
+                    <div class="erreurChamp">
+                        {{ form_errors(formAdvert.content) }}
+                    </div>
+                    <div class="col-sm-8">
+                        {{ form_widget(formAdvert.content, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                </div>
+
+                {#Champ "Auteur"#}
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        {{ form_label(formAdvert.author,"Auteur de l'annonce") }}
+                    </div>
+                    <div class="erreurChamp">
+                        {{ form_errors(formAdvert.author) }}
+                    </div>
+
+                    <div class="col-sm-8">
+                        {{ form_widget(formAdvert.author, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            {#Champ "Publié"#}
+            {#On teste si le champ "published" existe car il peut arriver que cela soit null#}
+            {% if formAdvert.published is defined %}
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <div class="well">
+                            {{ form_label(formAdvert.published,"Annonce Publiée") }}
+                            {{ form_errors(formAdvert.published) }}
+                            {{ form_widget(formAdvert.published) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {#Champ "Image"#}
+            <div class="well" style="padding-bottom: 0%; margin-top: -3%">
+                <div class="form-group">
+                    {#Génération du Label#}
+                    <div class="col-sm-4">
+                        {{ form_label(formAdvert.image) }}
+                    </div>
+                    {#Affichage des erreurs pour ce champ précis#}
+                    <div class="erreurChamp">
+                        {{ form_errors(formAdvert.image) }}
+                    </div>
+
+                    {#Génération de l'input#}
+                    <div class="col-sm-8">
+                        {#Génération de l'input#}
+                        {{ form_widget(formAdvert.image) }}
+                    </div>
+                </div>
+            </div>
+            {#Champ "Categories"#}
+            <div class="well" style="padding-bottom: 0%;font-size: large ">
+                <div class="form-group">
+                    {#Génération du Label#}
+                    <div class="col-sm-4">
+                        {{ form_label(formAdvert.categories) }}
+                    </div>
+                    {#Affichage des erreurs pour ce champ précis#}
+                    <div class="erreurChamp">
+                        {{ form_errors(formAdvert.categories) }}
+                    </div>
+                    <div class="col-sm-7">
+                        {#Génération de l'input#}
+                        {{ form_widget(formAdvert.categories) }}
+                        {#Ce Bouton est important et Fonctionne, uniquement dans le cas
+                        d'ajout de nouvelles catégories#}
+                        <a href="#" id="add_category" class="btn btn-success" style="margin: 5%; ">Ajouter une
+                            catégorie</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-7 col-sm-offset-2" id="enregistrementAnnonceBd">
+                {#Pour le bouton, pas de label ni d'erreur, on affiche juste le Widget#}
+                {{ form_widget(formAdvert.enregistrer, {'attr':{'class': 'btn btn-primary btn-block btn-lg'}}) }}
+                {# On peut enlever l'instruction ci-dessus et mettre le bouton ci-dessous
+                <button type="submit" class="btn btn-primary">Créer</button>
+                #}
+
+            </div>
+
+            {#Génération automatique des champs pas encore écrits
+                Dans cet exemple, ce serait le champ CSRF
+                (Cross Site Request Forgeries) (géré automatiquement par Symfony)
+            #}
+            {{ form_rest(formAdvert) }}
+
+            {#Fermeture de la Balise <form> du Formulaire HTML#}
+            {{ form_end(formAdvert) }}
+
+        </div>
+    </div>
+</div>
+
+{#On Affiche Le Message du Succès dans une Fenêtre Modale#}
+    {% for message in app.flashes('notice') %}
+        <div class="modal" id="enregistrementNotice">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">x</button>
+                        <h4 class="modal-title">Base de Données</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ message }}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-info" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+

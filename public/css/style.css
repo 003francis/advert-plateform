@@ -1,0 +1,66 @@
+body{
+    padding-top: 10px;
+    margin-top: 10px;
+    background-color: #DDD;
+}
+.well{
+    background-color: #CCC;
+    padding: 20px;
+}
+.starter-template{
+    padding: 40px 15px;
+    text-align: center;
+}
+#caroussel2 img{
+    padding-top: 120px;
+}
+#caroussel img{
+    margin-top: -155px;
+}
+
+footer .navbar-inverse .container-fluid .navbar-text{
+    padding: 10px;
+
+}
+footer{
+    margin-bottom: -20px;
+}
+
+#barprincipal{
+    padding: 10px;
+}
+#captionImg2, #captionImg5, #captionImg6{
+    background-color: #761c19;
+    opacity: 0.7;
+}
+#captionImg1, #captionImg3{
+    background-color: #007788;
+    opacity: 0.7;
+}
+#captionImg4{
+    background-color: #1b6d85;
+    opacity: 0.8;
+}
+#captionImg11, #captionImg21, #captionImg31, #captionImg41, #captionImg51, #captionImg61{
+    background-color: #761c19;
+    opacity: 0.7;
+}
+#caroussel2 ol{
+
+}
+.item .carousel-caption h1{
+    opacity: 1;
+    font-size: 1.3em;
+    font-family: Arial;
+}
+.item .carousel-caption a{
+    opacity: 1;
+    font-size: 1.3em;
+}
+.navbar-brand{
+    font-size: 2em;
+    font-weight: bold;
+}
+.jumbotron a{
+    text-decoration-line: none
+}

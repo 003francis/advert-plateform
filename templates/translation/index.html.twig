@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TranslationController!{% endblock %}
+
+{% block body %}
+
+    {#L'utilisation de PlaceHolder#}
+    <h1><strong>{{ 'welcome'|trans({'%name%': app.user.username}) }}</strong></h1>
+    <hr>
+    {# La Gestion des Pluriels
+    {{'quantite.nombre'|transchoice(3)}}
+    <hr>
+    #}
+    <div>
+        <h1>{{ 'advert.charte.titre'|trans }}</h1>
+        <hr>
+        {#
+        <div class="row">
+            <div class="col-sm-6">
+                <p>
+                    {{ 'advert.charte.contenu.premier_paragraphe'|trans }}
+                </p>
+            </div>
+            <div class="col-sm-6">
+                <p>
+                    {{ 'advert.charte.contenu.deuxieme_paragraphe'|trans }}
+                </p>
+            </div>
+        </div>
+        #}
+        {% for i in 0..2 %}
+            <p>{{ ('advert.charte.contenu.'~ i)|trans }}</p>
+        {% endfor %}
+        {#
+        La notation0..2est une syntaxe Twig pour générer une séquence linéaire.
+        Le nombre avant les deux points (..) est le début, celui après est la fin.
+        #}
+        <hr>
+        {#
+        <h1> Traduction Bloc <strong> {% trans %} Salut ! J'aime Symfony !!{% endtrans %} </strong> </h1>
+        <h1> Traduction Controller: <strong> {{ traduction }} </strong></h1>
+        <h1> Traduction Filtre: <strong> {{ 'Salut'|trans }} </strong></h1>
+        #}
+
+        {#
+            This friendly message is coming from:
+            <ul>
+                <li>Your controller at <code><a href="{{ 'C:/wamp64/www/rappelsfcalc/src/Controller/TranslationController.php'|file_link(0) }}">src/Controller/TranslationController.php</a></code></li>
+                <li>Your template at <code><a href="{{ 'C:/wamp64/www/rappelsfcalc/templates/translation/index.html.twig'|file_link(0) }}">templates/translation/index.html.twig</a></code></li>
+            </ul>
+            #}
+    </div>
+{% endblock %}

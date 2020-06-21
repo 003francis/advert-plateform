@@ -1,0 +1,27 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+### On configure les ROUTES pour notre Système de Sécurité
+###LES ROUTES DU PARE-FEU
+login1:
+  path: /loginUser
+  defaults:
+    _controller: App\Controller\SecurityController::login
+
+### On ne définit pas le Controlleur pour les Routes "login_check" et 'logout"
+##Car Symfony va attraper tout seul les requêtes sur ces routes
+##Grâce au gestionnaire d'évènements
+
+login_check:
+  path: /login_check
+
+logout:
+  path: /logout
+
+translation:
+  path: /{_locale}/translation/ #Le paramètre {_locale} permet de choisir la locale dans laquelle traduire son site
+  controller: App\Controller\TranslationController::index
+  requirements:
+    # les locales disponibles (pour notre site), séparées par des pipes « | »
+    _locale: en|fr #Pour limiter les locales à deux langues seulement. Si on ne définit pas cette contrainte, quand on tentera de traduire le site en "de" par exemple, on aura le rendu du résultat dans la langue de notre locale(fr)

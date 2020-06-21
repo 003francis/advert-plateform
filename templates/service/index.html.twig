@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire-{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleView.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ form(form) }}
+    {#On Affiche tous le message bag au cas où
+    le formulaire est transmis avec succès#}
+    {% for message in app.flashes('envoiFormulaire') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Lecture d'une Annonce-{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleView.css') }}">
+{% endblock %}
+
+{% block body %}
+    {# On vérifie qu'une page soit bien asociée à l'annonce
+    href="{{ asset('css/style.css') }}"
+     #}
+    <h1 id="titreAction">Affichage de l'Annonce n°{{ advert.id }}</h1>
+    {# CAS D'USAGE de NOTRE EXTENSION \App\Twig\AntispamExtension
+    <hr>
+    {% if checkIfSpam(advert.title) %}
+        <h2>Votre Message est un SPAM...</h2>
+    {% else %}
+        <h2>Votre Message est n'est pas du TOUT un SPAM...</h2>
+    {% endif %}
+   #}
+    <hr>
+    {% for message in app.flashes('notice') %}
+        <p style="font-size: 1.5em"><strong> {{ message }} </strong>
+            (Actualisez la page pour faire disparaître ce message)
+        </p>
+    {% endfor %}
+
+    {#Si on trouve l'image n'est pas null, on l'affiche proprement#}
+    {% if advert.image is not null %}
+        <div class="row">
+            <div class="col-md-4">
+                {#En tenant compte de la méthode "getWebPath()" de l'entité "Image"#}
+                <img src="{{ asset(advert.image.webpath) }}" alt="{{ advert.image.alt }}"
+                     class="img-responsive img-rounded">
+
+                {# Code d'avant
+                <img src="{{ asset(advert.image.url) }}" alt="{{ advert.image.alt }}"
+                     class="img-responsive img-rounded">
+                     #}
+            </div>
+            <div class="col-md-8 titreAnnonce">
+                <h2>{{ advert.title }}</h2>
+                <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+               {# <i>Par {{ advert.author }}, le {{ advert.date|localizeddate(medium) }}</i> #}
+                {# <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y:H:i:s') }}</i>
+                date('l j F Y') : Un autre format de date
+                {{ date|localizeddate(dateFormat, timeFormat, locale) }} : Un autre format de date
+                #}
+                {##}
+            </div>
+        </div>
+        {#Si l'image n'est pas là, on affiche seulement le titre de l'annonce
+         au dessus de son contenu #}
+    {% else %}
+        <h2>{{ advert.title }}</h2>
+        <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+    {% endif %}
+
+    <div class="well">
+        {{ advert.content }}
+    </div>
+
+    {#On Affiche les catégories d'une Annonce#}
+    {% if not advert.categories.empty %}
+        <div class="well">
+            {#L'utilisation du "empty" d'ArrayCollection pour savoir
+            si la liste de catégories est vide ou non"#}
+            <p style="text-align: center; font-size: 1.5em">
+                Cette annonce est parue dans les catégories suivantes:
+                <strong>
+                    {% for category in advert.categories %}
+                        {{ category.name }}{% if not loop.last %}, {% else %}.{% endif %}
+                        {#L'utilisation de la variable {{ loop.last }} dans la
+                        Boucle pour ne pas mettre de virgule après la dernière
+                        catégorie affichée et le point à la fin de tout #}
+                    {% endfor %}</strong>
+            </p>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if listAdvertSkills|length > 0 %}
+        <div class="well">
+            <div style="text-align: center; font-size: 1.5em">
+                <strong>Cette annonce requiert les compétences suivantes : </strong>
+                <ol>
+                    {% for advertSkill in listAdvertSkills %}
+                        <li>{{ advertSkill.skill.name }} : <i
+                                    style="color: #761c19; text-decoration: underline"> {{ advertSkill.level }}</i></li>
+                    {% endfor %}
+                </ol>
+
+            </div>
+        </div>
+    {% endif %}
+    <hr>
+
+    <h3 style="text-align: center; color: #761c19; font-weight: bold">Les Applications à l'Annonce n°{{ advert.id }}
+        : </h3>
+
+    <div class="well">
+        <div class="row">
+            {% for application in listApplications %}
+                <div class="col-md-4">
+                    <h4><strong>{{ application.author }}</strong></h4>
+                </div>
+                <div class="col-md-7 well">
+                    {{ application.content }}
+                    <i>Posté le {{ application.date|date('d/m/Y') }}</i>
+                </div>
+            {% else %}
+                <p>Pas (encore!) de Candidature pour cette Annonce...</p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+
+    <p style="text-align: center">
+        <a href="{{ path('oc_advert_index') }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Retour à la liste
+        </a>
+        {% if is_granted('EDIT', advert) %}
+            <button class="btn btn-default" id="editAnnonce">
+                <i class="glyphicon glyphicon-edit"></i>
+                Modifier l'annonce
+            </button>
+            <a href="{{ path('oc_advert_deleteAction', {'id': advert.id}) }}" class="btn btn-danger">
+                <i class="glyphicon glyphicon-trash"></i>
+                Supprimer l'annonce
+            </a>
+        {% endif %}
+    </p>
+
+    {#Une fenêtre Modale sur un Avertissement Avant la Modification d'une Annonce#}
+    <div class="modal fade" id="editNotice" style="margin-top: 5%">
+        <div class="modal-dialog">
+            <div class="modal-content row">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" title="Annuler l'Action">x</button>
+                    <h4 class="modal-title" style="font-size: 2em; text-align: center"><strong>
+                            Modification-Annonce </strong></h4>
+                </div>
+                <div class="modal-body" style="text-align: center; font-size: large">
+                    <strong>
+                        Vous êtes sur le point d'éditer une Annonce déjà existante! <br>
+                        Veillez à ne pas changer l'esprit général de l'annonce...
+                    </strong>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button class="btn btn-danger" data-dismiss="modal">
+                        <i class="glyphicon glyphicon-remove"></i>
+                        Annuler
+                    </button>
+                    <a href="{{ path('oc_advert_editAction', {'id': advert.id}) }}" type="button"
+                       class="btn btn-info">
+                        <i class="glyphicon glyphicon-ok-sign"></i>
+                        OK ! Bien
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#Script Pour l'activation de la Fenêtre Modale avant la Modification d'une Annonce#}
+    <script type="text/javascript" src="{{ asset('js/notificationAvantModification.js') }}"></script>
+{% endblock %}

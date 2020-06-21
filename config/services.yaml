@@ -1,0 +1,134 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    #antispam:
+    #  class: 'App\Services\Antispam\Antispam'
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\:
+    resource: '../src/Controller'
+    tags: ['controller.service_arguments']
+
+  # add more service definitions when explicit configuration is needed
+  # please note that last definitions always *replace* previous ones
+
+  #### ON DEFINIT NOS PROPRES SERVICES
+  #1) Service Antispam
+  #NOTA: Cette déclaration
+  service_antispam: #Le nom du service est à écrire comme l'on veut
+    class: 'App\Services\Antispam\Antispam'
+      #arguments: ['@mailer', '@twig', 50]  #ça aussi, ça marche... @
+      #@mailer est le nom d'un service... Notez que @ doit précéder le nom du service
+      #arguments:
+      #   $minLength: 50
+    #Ici, on définit explicitement la valeur de $minLength
+    #qui est un attribut du service Antispam.
+    #Cette valeur de l'attribut est récupéré dans le Constructeur du Service
+
+    #Une fois les arguments définis dans cette configuration,
+    #il suffit de les récupérer dans le constructeur du Service
+    #Notez que les arguments de cette configuration et ceux du Constructeur du Service vont de paire
+    #i.e, ils doivent être écrits avec la même Orthographe
+
+  ##ON déclare notre service antiflood pour notre Contrainte
+  validator.antiflood:                                               # Le nom du service
+    class: 'App\Validator\AntifloodValidator'                      # La classe du service, ici notre validateur déjà créé
+    arguments: ["@request_stack", "@doctrine.orm.entity_manager"]  # Les données qu'on injecte au service : la requête et l'EntityManager
+    tags: {name: validator.constraint_validator, alias: service_antiflood} # C'est avec l'alias qu'on retrouvera le service
+
+    ##################################
+    #LES SERVICES, UTILISATION POUSSEE
+    ##################################
+    ##Une fois qu'on a créé une classe avec la commande :
+    ##php bin/console make:twig_extension
+    ##Inutile de faire la manipulation ci-dessous, elle serait une redondance quand-même
+    #twig.antispam_extension:
+    #   class: App\Twig\AntispamExtension
+    #  arguments: ['@service_antispam'] #L'argument appelé en dans le CONSTRUCTEUR de NOTRE SERVICE. On appelle L'injection des dépendances
+    # tags: {name: twig.extension}   ##Il est possible d'associer plusieurs tags à un même service
+    ## L'attribut 'name' est le nom du Tag.
+    ## C'est grâce à ce nom que TWIG va pouvoir récupérer tous les services avec ce Tag qui est ici, "twig.extension"
+
+    ##Pour connaitre tous les services implémentant un certain tag, on peut exécuter la commande suivante:
+    # php bin/console debug:container --tag=twig.extension
+    #Récupérer tous ses services tagués, c'est exactement ce que fait TWIG quand il s'initialise. De cette façon, il peut ajouter nos fonctions à nos comportements
+
+  beta.html_adder:
+    class: App\LesEvenements\BetaHTMLAdder
+
+  beta.listener:
+    class: App\LesEvenements\BetaListener
+    arguments: ['@beta.html_adder','2020-06-17']
+    tags:
+      - {name: kernel.event_listener, event: kernel.response, method: processBeta, priority: 2}
+      ##Ce tag, nous permet d'enregistrer, notre LISTENER dans le EventDispatcher (gestionnaire d'évènements)
+      #*******************************************************
+      # 'priority' est un indice de priorité de listeners.
+      #Il permet de personnaliser l'ordre d'exécution des listeners sur un même évènement.
+      #Plus cet indice de priorité est élevé, plus le listener sera exécuté tôt,i.e avant les autres...
+      # Par défaut, sa valeur est 0.
+      #On peut également définir une priorité négative. ce qui aura pour effet d'exéuter le lister relativement tard.
+      #*******************************************************
+      # - {name: kernel.event_listener, event: kernel.controller, method: ignoreBeta}
+      ### 'event' c'est le nom de l'évènement que le listener veut écouter
+      ### 'method' c'est le nom de la méthode du listener à exécuter lorsque l'évènement est déclenché
+      ## Ces deux paramètres, nous les avons définis dans la méthode $dispatcher->addListener(). cfr('AdvertRappelController')
+      ##NOTA: Un service peut écouter plusieurs evts, pour cela, il suffit d'ajouter des tags, les uns en dessous des autres
+      ##Il faut choisir le bon tag
+  #########################################################
+  #Pour nos propres Evènements que nous avons créés
+  bigbrother.message_notificator:
+    class: App\LesEvenements\NosPropresEvenements\Bigbrother\MessageNotificator
+    arguments: ['@mailer']
+
+  listener.message_listener:
+    class: App\LesEvenements\NosPropresEvenements\Listeners\MessageListener
+    arguments:
+      - '@bigbrother.message_notificator'
+      - ["zelia tshiala", "ruth kanyinda"]
+      # Noms des utilisateurs à surveiller
+    tags:
+    #- {name: kernel.event_listener, event: advert.post_message, method: processMessage }
+    #- {name: kernel.event_listener, event: advert.update_message, method: processMessage }
+    ###################
+    #Les Souscripteurs
+    #*****************
+  listener.message_listener_subscriber:
+    class: App\EventSubscriber\MessageListenerSubscriber
+    arguments:
+      - '@bigbrother.message_notificator'
+      - ["zelia tshiala", "ruth kanyinda"]
+      # Noms des utilisateurs à surveiller
+    tags:
+      - {name: kernel.event_subscriber } # Avec Seulement ce tag, le gestionnaire d'évènements recupère tous les souscripteurs d'evts et les enregistre
+
+      #event: advert.post_message est la valeur que nous avons Déclarée
+      #dans notre constante POST_MESSAGE de classe AdvertEvent qui se trouve dans App\LesEvenements\NosPropresEvenements\Events
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+{#
+Ce Template se charge de recevoir les variables envoyées par
+l'action "menu()" du controller
+#}
+<ul class="nav nav-pills nav-stacked">
+    {% for advert in listAdverts %}
+    <li>
+        <a href="{{ path('oc_advert_viewAction', {'id': advert.id}) }}">
+            {{ advert.title }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>

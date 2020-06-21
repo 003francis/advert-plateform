@@ -1,0 +1,132 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders: #Il permet d'encoder les mots de passe de nos utilisateurs(users)
+        Symfony\Component\Security\Core\User\User: plaintext
+        App\Entity\AdvertUser:
+            algorithm: plaintext #Il prendra la valeur 'plaintext' car Nous avons défini Notre Mot de Passe en Clair dans la BD
+        FOS\UserBundle\Model\UserInterface: bcrypt
+
+    role_hierarchy: #Ici, on définit la hiérarchie des rôles
+        #Un Admin hérite des droits d'auteur et de modérateur
+        ROLE_ADMIN:       [ROLE_AUTEUR, ROLE_MODERATEUR, ROLE_USER] #On définit ici que le rôle ROLE_AUTEUR et ROLE_MODERATEUR sont compris dans le rôle ROLE_ADMIN. i.e que le ROLE_ADMIN peut faire tout ce que ses fils peuvent
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        #NOTA: Les noms des rôles n'ont pas d'importance
+        #Si ce n'est qu'ils doivent commencer par "ROLE"
+        #Ici, on ne définit UNIQUEMENT que la hiérarchie entre les rôles et NON l'EXHAUSTIVITE des rôles.
+        # Ainsi, on pourrait tout à fait avoir un rôle ROLE_TRUC dans notre application, mais que les admin n'héritent pas
+
+    ##LE FOURNISSEUR ou PROVIDER
+        #Un fournisseur d'utilisateurs est une classe qui implémente
+        #l'interface UserProviderInterface, qui contient juste trois méthodes:
+        #1) loadUserByUsername($username), qui charge un utilisateur à partir d'un nom d'utilisateur ;
+        #2)refreshUser($user), qui rafraîchit un utilisateur avec les valeurs d'origine ;
+        #3)supportsClass(), qui détermine quelle classe d'utilisateurs gère le fournisseur.
+        #########
+        #Symfony dispose déjà de trois types de fournisseurs,
+        #qui implémentent tous l'interface précédente évidemment,
+        #les voici:
+            #a) memory : utilise les utilisateurs définis dans la configuration, c'est celui qu'on a utilisé jusqu'à maintenant ;
+            #b) entity : utilise de façon simple une entité pour fournir les utilisateurs, c'est celui qu'on va utiliser ;
+            #c) id :permet d'utiliser un service quelconque en tant que fournisseur, en précisant le nom du service.
+    ################################################################
+
+    providers:
+        #Un provider est un Fournisseur d'utilisateurs.
+        #Les Firewalls s'adressent aux providers récupérer les utilisateurs
+        #users_in_memory: { memory: null }
+         #   in_memory: #Le Nom d'un provider est "arbitraire"
+          #      memory: #On définit les utilisateurs dans la configuration
+           #         users:
+            #            user: {password: userpass, roles:[ 'ROLE_USER' ]}
+             #           admin: {password: adminpass, roles:[ 'ROLE_ADMIN' ]}
+        ########################
+
+        ##Ici, on définit le Provider pour notre entité 'AdvertUser' que nous avons générée automatiquement
+        app_user_provider: #Nom du Provider, totalement Arbitraire
+            entity: #C'est le Type de provider. c'est un fixe défini par Symfony...Voir ci-haut les 3 types prédéfinis
+                class: App\Entity\User #Notre entité AdvertUser
+                property: username  #L'attribut de la classe qui sert d'identifiant
+       #############################################"
+        ###Pour le FOSUSerBundle
+        fos_userbundle:
+            id: fos_user.user_provider.username #fos a un provider de type ID
+        # used to reload user from session & other features (e.g. switch_user)
+
+    #############################################################################
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+      ########################################
+        #######Le Parfeu fosUserBundle
+        fosuser:
+          pattern: ^/
+          #user_checker: fos_user.user_checker
+          form_login:
+            provider: fos_userbundle
+            csrf_token_generator: security.csrf.token_manager
+            default_target_path: /rappelsf4calc/advert/
+
+          logout:
+              target:  fos_user_security_login
+          anonymous: true
+      #**********************************************************
+
+        #########################################################
+            ####Le Pare-feu pour notre AdvertUser
+        main:
+            pattern: ^/
+            anonymous: true
+            form_login:
+                login_path: login1
+                check_path: login_check
+                default_target_path: /rappelsf4calc/advert/
+            logout:
+                path: logout
+                target: login
+            provider: app_user_provider
+
+        ####################
+        ####Ce qu'on avait avant AdvertUser
+        #On configure notre propre Pare-feu qu'on appelle "main"
+        #main: #Tout nom du Pare-feu est 'arbitraire', mais doit être un NOM UNIQUE
+         #   pattern: ^/ # 'pattern' est un "masque d'URL". dans notre cas '^/' signifie que toutes les URL commençant par '/'(i.e notre Site Tout entier) sont protégées par ce pare-feu. on dit alors qu'elles sont DERRIERE le pare-feu main
+           # anonymous: true #Accepte tous les utlisateurs anonymes. Nous Protégeons nos ressources grâce aux rôles
+            #form_login: #Méthode d'authentification. Ici, on a choisi la méthode d'authentification par "formulaire". il en existe d'autres que celle-ci
+             #   login_path: login #Correspond à la route du Formulaire de connexion. "login" ici, est le nom de la route pour accéder audit FORMULAIRE DE CONNEXION
+              #  check_path: login_check #Correspond à la route de validation du formulaire de Validation; c'est sur cette route que seront vérifiés les identifiants renseignés par l'utilisateur sur le Formulaire précédent
+               # default_target_path: /rappelsf4calc/advert/
+            #logout: #Rend possible la déconnexion. En effet, par défaut il est impossible de se déconnecter une fois authentifié
+              #  path: logout #correspond au nom de la route à laquelle le visiteur doit aller pour être déconnecté
+               # target: login #Est le nom de la route vers laquelle sera redirigé le visiteur après sa déconnexion.
+           # provider: in_memory
+            ##Ces différentes routes vont être définies dans le fichier "routing.yaml"
+            #anonymous: lazy
+            #provider: users_in_memory
+            #provider: in_memory
+        ########
+
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    #L'access Control détermine si le visiteur a les bons droits(rôles) pour accéder à la ressource demandée
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN } #Avec cette définition, toutes les URLs commençant par /admin requièrent le rôle ROLE_ADMIN
+        - { path: ^/admin, ip: 127.0.0.1, requires_channel: https } #On peut sécuriser les URLs par IP ou par canal(http ou https)
+        # - { path: ^/profile, roles: ROLE_USER }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+
+    #NOTA: IL y a différents moyens d'utiliser les contrôles d'accès:
+    #1)Soit ici depuis la configuration, en appliquant des règles sur des URL. On sécurise ainsi un ensemble d'URL en une seule Ligne
+    #2)Soit directement dans les contrôleurs, en appliquant des règles sur les méthodes des contrôleurs. On peut ainsi appliquer des règles différentes selon des paramètres
+

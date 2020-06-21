@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Formulaire d'une Annonce-{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleView.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1 id="affichageAnnonce">LES FORMULAIRES</h1>
+    <hr>
+    <div class="well">
+        {{ form(formAdvert) }}
+
+    </div>
+    <hr>
+
+
+
+{% endblock %}

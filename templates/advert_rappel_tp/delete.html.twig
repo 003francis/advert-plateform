@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Suppression d'une annonce-{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleView.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h2 id="titreAction">Suppression-Annonce n°{{ advert.id }}</h2>
+    <hr>
+    <div class="well" style="text-align: center">
+        <p style="font-size: large">
+            <strong> Etes-vous certain de vouloir supprimer l'annonce "{{ advert.title }}" ? </strong>
+        </p>
+
+        {#On met l'id e l'annonce dans la route de l'action du formulaire#}
+        <form action="{{ path('oc_advert_deleteAction', {'id': advert.id}) }}" method="post" class="well">
+            <a href="{{ path('oc_advert_viewAction', {'id': advert.id}) }}" , class="btn btn-primary">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Retour à l'annonce
+            </a>
+            {#Ici, on a écrit le bouton de soumission à la main#}
+            <button type="submit" value="Supprimer" class="btn btn-danger">
+                <i class="glyphicon glyphicon-trash"></i>
+                Supprimer
+            </button>
+            {#Ceci va générer le champ CSRF#}
+            {{ form_rest(formAdvert) }}
+        </form>
+    </div>
+
+{% endblock %}

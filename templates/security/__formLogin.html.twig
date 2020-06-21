@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Connexion-{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleView.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {#Ce Formulaire a pour objectif d'afficher une Vue de connexion aux utilisateurs#}
+    <div class="row">
+        <div class="col-sm-5 col-sm-push-2">
+            {#S'il y a une erreur, on l'affiche#}
+            <div class="well">
+                {% if error %}
+                    <div class="alert alert-danger">
+                       {#{{ error.message }} #}
+                        Mauvais identifiants
+                    </div>
+                {% endif %}
+                {#Le formulaire, avec URL de soumission vers la route "login_check"#}
+                {#A la route "login_check", c'est symfony qui nius gère l'envoi#}
+                <form action="{{ path('login_check') }}" method="post">
+                    <fieldset>
+                        <legend><i class="fa fa-lock" aria-hidden="true"></i>Connexion sécurisée</legend>
+
+                        <div class="form-group">
+                            <label for="username">Identifiant</label>
+                            <input type="text" id="username" name="_username" value="{{ last_username }}"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mot de passe</label>
+                            <input type="password" id="password" name="_password" class="form-control">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                    Connexion
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,7 @@
+fos_user:
+  db_driver: orm #D'autres valeurs valides sont 'mongodb' et 'couchdb'
+  firewall_name: fosuser #Le nom du Pare-feu qui utilise 'fos_user' configuré dans le Fichier security.yaml
+  user_class: App\Entity\User #Le nom de la classe qui hérite de la Classe 'FOS\UserBundle\Model\User'
+  from_email:
+    address: francistshimbombo@gmail.com  #L'adresse e-mail par défaut quand le bundle envoie une confirmation d'enregistrement à l'utilisateur
+    sender_name: francisntata

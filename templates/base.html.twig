@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- L'affichage sur les mobiles va occuper
+    tout l'espace dispo avec une taille de 1(sans ZOOM)
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} OC Plateform {% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" text="text/css" href="{{ asset('fontawesome/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" text="text/css" href="{{ asset('bootstrap3/dist/css/bootstrap.css') }}">
+        <link rel="stylesheet" text="text/css" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+</head>
+
+<body>
+
+<div class="container">
+    <div id="header" class="jumbotron">
+        <h1>{{ 'advert.titre'|trans }}</h1>
+        <p>
+            {{ 'advert.devise'|trans }} {#Utilisation des mots clés#}
+        </p>
+        <p>
+            <a class="btn btn-primary btn-lg"
+               href="https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony2">
+               {% trans %} advert.bouton1  {% endtrans %}
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+           {# <i class="fa fa-camera-retro fa-5x">fa-camera</i> #}
+        </p>
+    </div>
+
+    <div class="row">
+        <div id="menu" class="col-md-3">
+            <h3>{{ 'Les Annonces'|trans }}</h3>
+            {#On met les onglets droits pour la page d'accueil et d'Ajout d'annonces#}
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ path('oc_advert_index') }}">{{ 'Accueil'|trans }}</a></li>
+                {#Ici, on n'affiche le lien "Ajouter une Annonce" qu'aux auteurs
+                    (et admins, qui héritent du rôle ROLE_AUTEUR) #}
+                {% if is_granted('ROLE_AUTEUR') %}
+                    {#On doit avoir mis une CONTRAINTE sur
+                    L'Action 'oc_advert_addAction' dans notre controller
+                    pour que ceci puisse être COHERENT#}
+                    <li><a href="{{ path('oc_advert_addAction') }}"> {% trans %} Ajouter une annonce {% endtrans %} </a></li>
+                {% endif %}
+            </ul>
+            {#la méthode is_granted() est très pratique pour afficher
+                du contenu différent selon les rôles de nos utilisateurs
+              NOTA: GERER des autorisations avec les rôles en Utilisant
+              a) La Méthode de l'ANNOTATION permet de sécuriser UNE METHODE de CONTROLLER
+              b) La méthode avec TWIG permet de sécuriser l'AFFICHAGE
+              c) La méthode de CONTROLE D'ACCES permet de sécuriser des URL
+
+                #}
+
+
+            <h4>{% trans %}Dernières Annonces {% endtrans %}</h4>
+            {#On fait une inclusion de (l'action) Controlleur#}
+            {{ render(controller('App\\Controller\\AdvertRappelController::menu')) }}
+            {#
+            {{ render(controller('App\\Controller\\AdvertRappelTpController::menu', {'limit':3})) }}
+            #}
+        </div>
+        <div id="content" class="col-md-9">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+    <hr>
+</div>
+<!-- Le Pieds de Page -->
+<footer>
+    <div class="row navbar navbar-inverse">
+        <div class="container-fluid col-lg-offset-5 col-lg-5">
+            <p class="navbar-text">
+                {{ 'Powered by'|trans }}
+                <a class="text" href="https://calculus-system.net/">Calculus-System</a> &copy; {{ 'now'|date('Y') }}
+            </p>
+        </div>
+    </div>
+</footer>
+
+
+{% block javascripts %}
+    <script src="{{ asset('bootstrap3/js/tests/vendor/jquery.min.js') }}"></script>
+    <script src="{{ asset('bootstrap3/dist/js/bootstrap.min.js') }}"></script>
+{% endblock %}
+</body>
+</html>

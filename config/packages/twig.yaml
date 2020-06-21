@@ -1,0 +1,11 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    exception_controller: null
+    #On Définit le Thème de tous nos Formulaires
+    form_themes: ['bootstrap_4_layout.html.twig']
+
+    #####Variables Globals configurées par nous-mêmes
+    #globals:
+     #   webmaster: "%env(WEBMASTER)%"

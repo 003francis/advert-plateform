@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Ajout d'une annonce-{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" text="text/css" href="{{ asset('css/styleView.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h2 id="titreAction">Ajout d'une Annonce</h2>
+    <hr>
+    {#On Inclut un Template Formulaire#}
+    {{ include("advert_rappel_tp/__formulaireAnnonce.html.twig") }}
+    <hr>
+    {#
+    <p>
+        <a href="{{ path('oc_advert_viewAction', {'id': advert.id}) }}", class="btn btn-primary">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Retour à l'annonce
+        </a>
+    </p>
+    #}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {#n Script pour Les Catégories #}
+    <script type="text/javascript" src="{{ asset('js/gestionChampCategories.js') }}"></script>
+{% endblock %}
